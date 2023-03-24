@@ -89,8 +89,6 @@ def sorting(equation):
                                 tempcounter = tempcounter + 1
                         if not trig:  # appends the power joined with x**
                             tempEquation.append('x**' + ''.join(temp[i + 2: i + tempcounter]))
-                    case _:
-                        tempEquation.append('x')
 
         match ''.join(temp[i:i + 3]):
             case 'sin':  # checks whether the first 3 letters is sin
@@ -172,17 +170,19 @@ def grid(this_text_needs_to_be_here):
 
 
 def colorfunc(label):
-    l.set_color(label)  # sets colour to
-    plt.draw()
+    l.set_color(label)  # sets colour to the selected label
+    plt.draw()      # redraws the plot with updated changes
 
 
 def stylefunc(label):
-    l.set_linestyle(label)
-    plt.draw()
+    l.set_linestyle(label)      # sets the style to the selected label
+    plt.draw()      # redraws the plot with updated changes
 
 
 def polar_toggle(text):
-    call(["python", "PolarGraph.py"])
+    plt.close()                                                                                 ######################### hash out when finished but keep in coursework photos
+    call(["python", "PolarGraph.py"])  # uses python to open up the PolarGraph.py file
+
 
 
 #######################################defining variables###########################################################
@@ -191,15 +191,15 @@ x_startValue = 100
 
 initial_text = ""
 
-x = np.arange(-(float(x_startValue)), float(x_startValue), 0.01)
+x = np.arange(-(float(x_startValue)), float(x_startValue), 0.01)        # (min x, max x, increment between each value)
 y = x
 
 fig, ax = plt.subplots()
-ax.grid(True)
+ax.grid(True)       # initiates grid
 l, = ax.plot(x, y, lw=2, color='red')  # (x axis increments, y axis increments , line width, line color)
-fig.subplots_adjust(left=0.3, right=0.99)
+fig.subplots_adjust(left=0.3, right=0.99)       # moves graph to the left and right
 
-Widget_colour = 'lightgoldenrodyellow'
+Widget_colour = 'lightgoldenrodyellow'      # color of boxes
 
 ####################################################creating interactive widgets###################################
 ax_grid = plt.axes([0.1, 0.75, 0.07, 0.05])
