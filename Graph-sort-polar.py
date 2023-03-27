@@ -15,6 +15,105 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, RadioButtons, TextBox, Slider
 from subprocess import call
 
+plt.close()
+
+
+########################################differentiation##########################################
+def differential(equation):
+    diffEquation = []
+
+    for i in range(len(equation)):
+        if len(equation[i]) > 5:
+            match equation[i][1:7]:
+                case 'np.sin':
+                    diffEquation.append('cos(x)')
+
+                case 'np.cos':
+                    diffEquation.append('-(np.sin(x))')
+
+                case 'np.tan':
+                    diffEquation.append('1/cos(x)')
+
+            match equation[i][1]:
+                case 'x':
+                    match equation[i][0]:
+                        case '(':
+                            counter = 4
+                            temp = []
+                            bracket = False
+                            while not bracket:
+                                if equation[i][counter] == ')':
+                                    bracket = True
+                                else:
+
+                                    temp.append(equation[i][counter])
+                                    counter = counter + 1
+                            power = int(''.join(temp))
+                            diffEquation.append(str(power) + 'x^' + str((power - 1)))
+                            print(diffEquation)
+        match equation[i]:
+            case '(x)':
+                diffEquation.append(equation[i])
+        match equation[i]:  # appends mathematical functions when they are seen
+            case '(+)':
+                diffEquation.append(equation[i])
+            case '(-)':
+                diffEquation.append(equation[i])
+            case '(/)':
+                diffEquation.append(equation[i])
+            case '(*)':
+                diffEquation.append(equation[i])
+    ax_Diff = plt.axes([0.05, 0.4, 0.2, 0.06])
+    Diff_box = TextBox(ax_Diff, '' , initial=''.join(diffEquation))
+    print(diffEquation)
+
+##################################integral equation#################################
+def integral(equation):
+    intEquation = []
+
+    for i in range(len(equation)):
+        if len(equation[i]) > 5:
+            match equation[i][1:7]:
+                case 'np.sin':
+                    intEquation.append('-cos(x)')
+
+                case 'np.cos':
+                    intEquation.append('-(np.sin(x))')
+
+                case 'np.tan':
+                    intEquation.append('n/a')
+
+            match equation[i][1]:
+                case 'x':
+                    match equation[i][0]:
+                        case '(':
+                            counter = 4
+                            temp = []
+                            bracket = False
+                            while not bracket:
+                                if equation[i][counter] == ')':
+                                    bracket = True
+                                else:
+
+                                    temp.append(equation[i][counter])
+                                    counter = counter + 1
+                            power = int(''.join(temp))
+                            intEquation.append('(x^' + str(power+1) + ')/'+str(power+1))
+        match equation[i]:
+            case '(x)':
+                intEquation.append(equation[i])
+        match equation[i]:  # appends mathematical functions when they are seen
+            case '(+)':
+                intEquation.append(equation[i])
+            case '(-)':
+                intEquation.append(equation[i])
+            case '(/)':
+                intEquation.append(equation[i])
+            case '(*)':
+                intEquation.append(equation[i])
+        ax_int = plt.axes([0.05, 0.4, 0.2, 0.06])
+        int_box = TextBox(ax_int, '', initial=''.join(intEquation))
+
 
 #################################sorting equation###################################
 def sorting(equation):
@@ -154,14 +253,18 @@ def sorting(equation):
 
     equation.pop()  # removes the final '*'
     final = ''.join(equation)  # converts equation into a string
-
+    print(final)
     ydata = eval(final)  # copied from old submit function
     l.set_ydata(ydata)
     ax.set_ylim(np.min(ydata), np.max(ydata))
+    differential(equation)
     plt.draw()
 
 
 ##############################defining functions and routines##############################
+
+def closing():
+    plt.close()
 
 
 def grid(this_text_needs_to_be_here):
@@ -171,18 +274,17 @@ def grid(this_text_needs_to_be_here):
 
 def colorfunc(label):
     l.set_color(label)  # sets colour to the selected label
-    plt.draw()      # redraws the plot with updated changes
+    plt.draw()  # redraws the plot with updated changes
 
 
 def stylefunc(label):
-    l.set_linestyle(label)      # sets the style to the selected label
-    plt.draw()      # redraws the plot with updated changes
+    l.set_linestyle(label)  # sets the style to the selected label
+    plt.draw()  # redraws the plot with updated changes
 
 
 def polar_toggle(text):
-    plt.close()                                                                                 ######################### hash out when finished but keep in coursework photos
+    closing()  ##### hash out when finished but keep in coursework photos
     call(["python", "PolarGraph.py"])  # uses python to open up the PolarGraph.py file
-
 
 
 #######################################defining variables###########################################################
@@ -191,18 +293,18 @@ x_startValue = 100
 
 initial_text = ""
 
-x = np.arange(-(float(x_startValue)), float(x_startValue), 0.01)        # (min x, max x, increment between each value)
+x = np.arange(-(float(x_startValue)), float(x_startValue), 0.01)  # (min x, max x, increment between each value)
 y = x
 
 fig, ax = plt.subplots()
-ax.grid(True)       # initiates grid
+ax.grid(True)  # initiates grid
 l, = ax.plot(x, y, lw=2, color='red')  # (x axis increments, y axis increments , line width, line color)
-fig.subplots_adjust(left=0.3, right=0.99)       # moves graph to the left and right
+fig.subplots_adjust(left=0.3, right=0.99)  # moves graph to the left and right
 
-Widget_colour = 'lightgoldenrodyellow'      # color of boxes
+Widget_colour = 'lightgoldenrodyellow'  # color of boxes
 
 ####################################################creating interactive widgets###################################
-ax_grid = plt.axes([0.1, 0.75, 0.07, 0.05])
+ax_grid = plt.axes([0.1, 0.75, 0.07, 0.05])  # [x, y, width ,height]
 
 ax_box = plt.axes([0.05, 0.6, 0.2, 0.06])
 
@@ -211,6 +313,8 @@ ax_line_option = fig.add_axes([0.1, 0.8, 0.07, 0.15], facecolor=Widget_colour)
 ax_color = fig.add_axes([0.02, 0.7, 0.08, 0.25], facecolor=Widget_colour)
 
 ax_polar_button = plt.axes([0.1, 0.7, 0.07, 0.05])
+
+ax_Diff = plt.axes([0.05, 0.4, 0.2, 0.06])
 
 grid_button = Button(ax_grid, 'Grid', color=Widget_colour, hovercolor='grey')
 
@@ -221,6 +325,8 @@ color_button = RadioButtons(ax_color, ('red', 'orange', 'yellow', 'green', 'blue
 line_option = RadioButtons(ax_line_option, ('-', '--', '-.', ':'))
 
 text_box = TextBox(ax_box, 'Evaluate', initial=initial_text)
+
+Diff_box = TextBox(ax_Diff, 'Differential', initial='')
 
 ################################## when interacted with ###################################################
 

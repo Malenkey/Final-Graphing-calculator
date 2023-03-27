@@ -5,6 +5,9 @@ from subprocess import call
 
 
 ##########################Functions############################
+
+def closing():
+    plt.close()
 def theta_limits(max):
     global theta  # globalises theta to be used in other functions
     theta = np.linspace(0, max, 360)  # converts the limits of theta to the slider value
@@ -29,7 +32,7 @@ def theta_max(val):
     fig.canvas.draw_idle()
 
 def Cartesian_toggle(text):
-    plt.close()
+    closing()
     call(["python", "Graph-sort-polar.py"])
 
 
@@ -56,15 +59,17 @@ fig.subplots_adjust(left=0.3, right=0.99)
 #####################plotting boxes###################
 ax_thetaMax = fig.add_axes([0.25, 0.91, 0.65, 0.03])
 ax_radius = plt.axes([0.094 + 0.15, 0.7, 0.08, 0.05])
-ax_toggle = plt.axes([0.5, 0.7, 0.08, 0.05])
+
+ax_toggle = plt.axes([0.094 + 0.15, 0.6, 0.1, 0.05])
 
 max_slider = Slider(ax=ax_thetaMax, label='θ max', valmin=0, valmax=(2 * np.pi), valinit=max)
 radius_box = TextBox(ax_radius, 'Radius', initial='1')
-grid_button = Button(ax_toggle, 'Grid', color= 'lightgoldenrodyellow', hovercolor='grey')
+
+toggle_button = Button(ax_toggle, 'Cartesian', color='lightgoldenrodyellow', hovercolor='grey')
 
 #######################when interacted with####################
 
-grid_button.on_clicked(Cartesian_toggle)
+toggle_button.on_clicked(Cartesian_toggle)
 
 max_slider.on_changed(theta_max)
 
